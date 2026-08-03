@@ -3,7 +3,7 @@ import { Hono } from "hono";
 // import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
 import { findSupportedChatModel } from "@coolcode/shared";
-import { db } from "@coolcode/database";
+import { db } from "@coolcode/database/client";
 import { Role, Mode, MessageStatus } from "@coolcode/database/enums";
 
 
