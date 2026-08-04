@@ -25,7 +25,7 @@ enum Mode {
 
 enum MessageStatus {
   COMPLETE
-  INTERUPTED
+  INTERRUPTED
 }
 
 model Session {
@@ -43,8 +43,8 @@ model Session {
 model Message {
   id        String   @id @default(cuid())
   sessionId String
-  role      String
-  status    String
+  role      Role
+  status    MessageStatus
   model     String
   content   String
   parts     Json?
