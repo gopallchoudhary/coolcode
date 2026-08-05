@@ -7,7 +7,7 @@ type ErrorResponse = {
 }
 
 
-export async function getErrorMessages(response: ErrorResponse) {
+export async function getErrorMessage(response: ErrorResponse) {
     try {
         const data = (await response.json()) as { error?: string }
         if (typeof data.error === 'string' && data.error.length > 0) {

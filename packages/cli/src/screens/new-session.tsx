@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router";
 import { UserMessage } from "../components/messages";
 import { SessionShell } from "../components/session-shell";
 import { apiClient } from "../lib/api-client";
-import { getErrorMessages } from "../lib/http-errors";
+import { getErrorMessage } from "../lib/http-errors";
 import { DEFAULT_CHAT_MODEL_ID } from "@coolcode/shared";
 import { useToast } from "../providers/toast";
 
@@ -56,7 +56,7 @@ export function NewSession() {
 
 				if (ignore) return;
 				if (!res.ok) {
-					throw new Error(await getErrorMessages(res));
+					throw new Error(await getErrorMessage(res));
 				}
 				const session = await res.json();
 
