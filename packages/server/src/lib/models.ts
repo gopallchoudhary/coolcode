@@ -1,5 +1,6 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { createOpenAI, openai } from "@ai-sdk/openai";
+import {getChatModel} from './get-model'
 import { type LanguageModel } from "ai";
 import {
     findSupportedChatModel,
@@ -32,7 +33,7 @@ function resolveAnthropicModel(modelId: AnthropicModelId): ResolvedModel {
 
 function OpenAIModel(modelId: OpenAIModelId): ResolvedModel {
     return {
-        model: openai(modelId),
+        model: getChatModel(modelId),
         provider: "openai",
         modelId,
     }
