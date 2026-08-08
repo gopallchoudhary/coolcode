@@ -1,7 +1,8 @@
 import { anthropic } from "@ai-sdk/anthropic";
 import { createOpenAI, openai } from "@ai-sdk/openai";
-import {getChatModel} from './get-model'
+import { getChatModel } from './get-model'
 import { type LanguageModel } from "ai";
+import type { ProviderOptions } from "@ai-sdk/provider-utils";
 import {
     findSupportedChatModel,
     type SupportedChatModel,
@@ -17,6 +18,42 @@ export type ResolvedModel = {
     model: LanguageModel;
     provider: SupportedProvider;
     modelId: SupportedChatModelId;
+    providerOptions?: ProviderOptions
+}
+
+const ANTHROPIC_PROVIDER_OPTIONS: Partial<Record<AnthropicModelId, ProviderOptions>> = {
+    "claude-opus-4-6": {
+        anthropic: {
+            thinking: {
+                type: 'enabled',
+                budgetTokens: 10000
+            }
+        }
+    },
+
+    "claude-sonnet-4-6": {
+        anthropic: {
+            thinking: {
+                type: 'enabled',
+                budgetTokens: 10000
+            }
+        }
+    }
+}
+
+const OPENAI_PROVIDER_OPTIONS: Partial<Record<OpenAIModelId, ProviderOptions>> = {
+    "openrouter/free": {
+        openai: {
+            thinking: {
+                reasoningSummary: "detailed"
+            }
+        }
+    },
+    "gpt-5.4": {
+        thinking: {
+            reasoningSummary: "detailed"
+        }
+    }
 }
 
 function assertUnsupportedProvide(provider: never): never {
@@ -28,14 +65,16 @@ function resolveAnthropicModel(modelId: AnthropicModelId): ResolvedModel {
         model: anthropic(modelId),
         provider: "anthropic",
         modelId,
+        providerOptions: ANTHROPIC_PROVIDER_OPTIONS[modelId]
     }
 }
 
-function OpenAIModel(modelId: OpenAIModelId): ResolvedModel {
+function resolveOpenAIModel(modelId: OpenAIModelId): ResolvedModel {
     return {
         model: getChatModel(modelId),
         provider: "openai",
         modelId,
+        providerOptions: OPENAI_PROVIDER_OPTIONS[modelId]
     }
 }
 
@@ -46,7 +85,7 @@ function resolveSupportedChatModel(model: SupportedChatModel): ResolvedModel {
         case "anthropic":
             return resolveAnthropicModel(model.id);
         case "openai":
-            return OpenAIModel(model.id);
+            return resolveOpenAIModel(model.id);
         default:
             return assertUnsupportedProvide(provider);
     }
