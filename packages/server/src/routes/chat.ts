@@ -6,7 +6,6 @@ import { streamSSE } from "hono/streaming";
 import { z } from "zod";
 import { Mode, MessageStatus } from "@coolcode/database/enums";
 import {
-    messagePartSchema,
     type ChatStreamEvent,
     toolCallArgsSchema,
     messagePartsSchema,
@@ -93,7 +92,7 @@ async function streamAIResponse(
         }
 
         const validateParts: Prisma.InputJsonValue | undefined =
-            parts.length > 0 ? messagePartSchema.parse(parts) : undefined;
+            parts.length > 0 ? messagePartsSchema.parse(parts) : undefined;
 
         const elapsedMs = Date.now() - startTime;
         await db.message.create({
@@ -227,7 +226,7 @@ async function streamAIResponse(
 
         const validatedParts: Prisma.InputJsonValue | undefined =
             parts.length > 0
-                ? messagePartSchema.parse(parts)
+                ? messagePartsSchema.parse(parts)
                 : undefined
 
         const assistantMessage = await db.message.create({
