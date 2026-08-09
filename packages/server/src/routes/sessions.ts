@@ -6,6 +6,7 @@ import { z } from "zod";
 import { findSupportedChatModel } from "@coolcode/shared";
 import { db } from "@coolcode/database/client";
 import { Role, Mode, MessageStatus } from "@coolcode/database/enums";
+import type { AuthenticatedEnv } from "../middleware/requireAuth";
 
 
 const createSessionSchema = z.object({
@@ -37,10 +38,14 @@ const createSessionValidator = zValidator(
 	},
 );
 
-const app = new Hono()
+const app = new Hono<AuthenticatedEnv>()
 	.get("/", async (c) => {
+		const userId = c.get('userId')
 		const sessions = await db.session.findMany({
 			orderBy: { createdAt: "desc" },
+			where: {
+				userId
+			},
 			select: {
 				id: true,
 				title: true,
@@ -62,8 +67,9 @@ const app = new Hono()
 		// });
 
 		const id = c.req.param('id')
+		const userId = c.get('userId')
 		const session = await db.session.findUnique({
-			where: { id },
+			where: { id, userId },
 			include: {
 				messages: { orderBy: { createdAt: "asc" } }
 			}
@@ -72,7 +78,7 @@ const app = new Hono()
 		if (!session) {
 			Sentry.logger.warn("Session not found", {
 				sessionId: id,
-				userId: 'mock-user'
+				userId
 			});
 
 			return c.json({ error: "Session not found" }, 404)
@@ -88,11 +94,12 @@ const app = new Hono()
 	.post('/', createSessionValidator, async (c) => {
 		// await new Promise((r) => setTimeout(r, 5000))
 		const { initialMessage, ...data } = c.req.valid('json')
+		const userId = c.get('userId')
 
 		const session = await db.session.create({
 			data: {
 				...data,
-				userId: 'mock-user',
+				userId,
 				...(initialMessage && {
 					messages: {
 						create: {
