@@ -15,6 +15,7 @@ import { isSupportedChatModel, resolveChatModel } from "../lib/models";
 import type { Prisma } from "@coolcode/database";
 import { buildSystemPrompt } from "../system-prompt";
 import { createTools } from "../tools";
+import type { AuthenticatedEnv } from "../middleware/requireAuth";
 
 
 
@@ -308,13 +309,15 @@ async function streamAIResponse(
     }
 }
 
-const app = new Hono()
+const app = new Hono<AuthenticatedEnv>()
     //. POST /:sessionId/resume
     .post("/:sessionId/resume", async (c) => {
         const sessionId = c.req.param("sessionId");
+        const userId = c.get("userId")
         const session = await db.session.findUnique({
             where: {
                 id: sessionId,
+                userId
             },
             include: {
                 messages: { orderBy: { createdAt: "asc" } },
@@ -391,10 +394,12 @@ const app = new Hono()
     //. POST /:sessionId
     .post("/:sessionId", submitValidator, async (c) => {
         const sessionId = c.req.param("sessionId");
+        const userId = c.get("userId")
 
         const session = await db.session.findUnique({
             where: {
                 id: sessionId,
+                userId
             },
             include: {
                 messages: { orderBy: { createdAt: "asc" } },
