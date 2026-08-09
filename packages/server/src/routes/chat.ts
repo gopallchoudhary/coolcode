@@ -124,15 +124,42 @@ async function streamAIResponse(
             messages: history,
             abortSignal: abortController.signal,
             providerOptions: resolvedModel.providerOptions,
+            includeRawChunks: true,
         });
 
         for await (const part of result.fullStream) {
             if (stream.aborted) break;
 
-            //. reasong-delta
+            //. raw chunk - intercept OpenRouter thinking tokens from delta.reasoning
+            if (part.type === "raw") {
+                const raw = part.rawValue as Record<string, unknown>;
+                const choices = raw?.choices as Array<{
+                    delta?: { reasoning?: string };
+                }> | undefined;
+                const reasoningDelta = choices?.[0]?.delta?.reasoning;
+                if (typeof reasoningDelta === "string" && reasoningDelta.length > 0) {
+                    const last = parts[parts.length - 1];
+                    if (last && last.type === "reasoning") {
+                        last.text += reasoningDelta;
+                    } else {
+                        parts.push({ type: "reasoning", text: reasoningDelta });
+                    }
+                    const event: ChatStreamEvent = {
+                        type: "reasoning-delta",
+                        text: reasoningDelta,
+                    };
+                    await stream.writeSSE({
+                        event: "reasoning-delta",
+                        data: JSON.stringify(event),
+                    });
+                }
+                continue;
+            }
+
+            //. reasoning-delta (for providers like Anthropic that support it natively)
             if (part.type === "reasoning-delta") {
                 const last = parts[parts.length - 1];
-                if (last && last.type === "text") {
+                if (last && last.type === "reasoning") {
                     last.text += part.text;
                 } else {
                     parts.push({ type: "reasoning", text: part.text });

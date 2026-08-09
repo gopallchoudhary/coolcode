@@ -44,14 +44,27 @@ const ANTHROPIC_PROVIDER_OPTIONS: Partial<Record<AnthropicModelId, ProviderOptio
 const OPENAI_PROVIDER_OPTIONS: Partial<Record<OpenAIModelId, ProviderOptions>> = {
     "openrouter/free": {
         openai: {
-            thinking: {
-                reasoningSummary: "detailed"
-            }
+            reasoningEffort: "medium"
         }
     },
     "gpt-5.4": {
-        thinking: {
-            reasoningSummary: "detailed"
+        openai: {
+            reasoningEffort: "medium"
+        }
+    },
+    "gpt-5.4-mini": {
+        openai: {
+            reasoningEffort: "medium"
+        }
+    },
+    "gpt-5.4-nano": {
+        openai: {
+            reasoningEffort: "low"
+        }
+    },
+    "gpt-4o-mini": {
+        openai: {
+            reasoningEffort: "medium"
         }
     }
 }
