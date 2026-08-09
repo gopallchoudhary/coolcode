@@ -8,7 +8,8 @@ const openrouterClient = createOpenAI({
     baseURL: process.env.OPENROUTER_BASE_URL,
 });
 
+
 export function getChatModel(modelId: string | null) {
-    return openrouterClient(modelId ?? DEFAULT_CHAT_MODEL);
+    return openrouterClient.chat(modelId ?? DEFAULT_CHAT_MODEL);
 }
 
