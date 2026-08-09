@@ -5,13 +5,15 @@ import { UserMessage } from "../components/messages";
 import { SessionShell } from "../components/session-shell";
 import { apiClient } from "../lib/api-client";
 import { getErrorMessage } from "../lib/http-errors";
-import { DEFAULT_CHAT_MODEL_ID } from "@coolcode/shared";
+import { Mode } from "@coolcode/database/enums";
 import { useToast } from "../providers/toast";
 
 //new sessionstateshema, toast, hasStartedRef, state(parsed)
 
 const newSessionStateSchema = z.object({
 	message: z.string(),
+	mode: z.enum(Mode),
+	model: z.string(),
 });
 
 export function NewSession() {
@@ -48,8 +50,8 @@ export function NewSession() {
 						initialMessage: {
 							role: "USER",
 							content: state.message,
-							mode: "BUILD",
-							model: DEFAULT_CHAT_MODEL_ID,
+							mode: state.mode,
+							model: state.model,
 						},
 					},
 				});
@@ -85,7 +87,7 @@ export function NewSession() {
 
 	return (
 		<SessionShell onSubmit={() => {}} inputDisabled loading>
-			<UserMessage message={state.message} />
+			<UserMessage message={state.message} mode={state.mode} />
 		</SessionShell>
 	);
 }
