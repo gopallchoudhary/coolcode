@@ -3,10 +3,13 @@ import { Hono } from "hono";
 // import { HTTPException } from "hono/http-exception";
 import * as Sentry from "@sentry/hono/bun";
 import { z } from "zod";
-import { findSupportedChatModel } from "@coolcode/shared";
 import { db } from "@coolcode/database/client";
 import { Role, Mode, MessageStatus } from "@coolcode/database/enums";
 import type { AuthenticatedEnv } from "../middleware/requireAuth";
+import { requireCreditsBalance } from "../middleware/require-credits-balance";
+import { isSupportedChatModel } from "../lib/models";
+
+
 
 
 const createSessionSchema = z.object({
@@ -19,7 +22,7 @@ const createSessionSchema = z.object({
 			mode: z.enum(Mode),
 			model: z
 				.string()
-				.refine((id) => !!findSupportedChatModel(id), "Unsupported model"),
+				.refine(isSupportedChatModel, "Unsupported model"),
 		})
 		.optional(),
 });
@@ -91,7 +94,7 @@ const app = new Hono<AuthenticatedEnv>()
 
 		return c.json(session)
 	})
-	.post('/', createSessionValidator, async (c) => {
+	.post('/', requireCreditsBalance,  createSessionValidator, async (c) => {
 		// await new Promise((r) => setTimeout(r, 5000))
 		const { initialMessage, ...data } = c.req.valid('json')
 		const userId = c.get('userId')

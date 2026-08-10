@@ -201,7 +201,7 @@ export function useChat(
                 case "reasoning-delta": {
                     const last = parts[parts.length - 1];
                     if (last && last.type === "reasoning") {
-                        last.text += event.text;
+                        parts[parts.length - 1] = { ...last, text: last.text + event.text };
                     } else {
                         parts.push({ type: "reasoning", text: event.text });
                     }
@@ -219,12 +219,11 @@ export function useChat(
                     emitParts(activeStream.requestId, parts);
                     break;
                 case "tool-result": {
-                    const tc = parts.find(
+                    const tcIdx = parts.findIndex(
                         (p): p is ClientToolCallPart => p.type === "tool-call" && p.id === event.toolCallId,
                     );
-                    if (tc) {
-                        tc.result = event.result;
-                        tc.status = "done";
+                    if (tcIdx !== -1) {
+                        parts[tcIdx] = { ...parts[tcIdx] as ClientToolCallPart, result: event.result, status: "done" };
                     }
                     emitParts(activeStream.requestId, parts);
                     break;
@@ -232,7 +231,7 @@ export function useChat(
                 case "text-delta": {
                     const last = parts[parts.length - 1];
                     if (last && last.type === "text") {
-                        last.text += event.text;
+                        parts[parts.length - 1] = { ...last, text: last.text + event.text };
                     } else {
                         parts.push({ type: "text", text: event.text });
                     }
