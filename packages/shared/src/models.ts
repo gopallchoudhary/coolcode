@@ -75,6 +75,14 @@ export const SUPPORTED_CHAT_MODELS = [
 			inputUsdPerMillionTokens: 0.15,
 			outputUsdPerMillionTokens: 0.60,
 		},
+	},
+	{
+		id: "gpt-5.6-luna",
+		provider: "openai",
+		pricing: {
+			inputUsdPerMillionTokens: 0.10,
+			outputUsdPerMillionTokens: .60,
+		},
 	}
 ] as const satisfies readonly SupportedChatModelDefinition[];
 

@@ -66,6 +66,11 @@ const OPENAI_PROVIDER_OPTIONS: Partial<Record<OpenAIModelId, ProviderOptions>> =
         openai: {
             reasoningEffort: "medium"
         }
+    },
+    "gpt-5.6-luna": {
+        openai: {
+            reasoningEffort: "high"
+        }
     }
 }
 
