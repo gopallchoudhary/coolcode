@@ -13,13 +13,13 @@ import { DEFAULT_DURATION } from "./types";
 import { SplitBorderChars } from "../../components/border";
 import { useTheme } from "../theme";
 
-export type ToastContextOptions = {
+export type ToastContextValue = {
 	show: (options: ToastOptions) => void;
 };
 
-const ToastContext = createContext<ToastContextOptions | null>(null);
+const ToastContext = createContext<ToastContextValue | null>(null);
 
-export function useToast(): ToastContextOptions {
+export function useToast(): ToastContextValue {
 	const value = useContext(ToastContext);
 
 	if (!value) {

@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import type { AuthenticatedEnv } from "../middleware/requireAuth";
+import type { AuthenticatedEnv } from "../middleware/require-auth";
 import { createCheckoutUrl, createCustomerPortalUrl } from "../lib/polar";
 
 

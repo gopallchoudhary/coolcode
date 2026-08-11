@@ -1,5 +1,5 @@
 import { createMiddleware } from "hono/factory";
-import type { AuthenticatedEnv } from "./requireAuth";
+import type { AuthenticatedEnv } from "./require-auth";
 import { getAvailableCreditsBalance } from "../lib/polar";
 
 export const requireCreditsBalance = createMiddleware<AuthenticatedEnv>(async (c, next) => {

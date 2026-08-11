@@ -1,11 +1,10 @@
-import type { Mode } from "@coolcode/database/enums";
+import type { ModeType } from "@coolcode/shared";
 
 export type SystemPrompt = {
-    cwd: string | null;
-    mode: Mode;
+    mode: ModeType;
 }
 
-export function buildSystemPrompt({ cwd, mode }: SystemPrompt): string {
+export function buildSystemPrompt({ mode }: SystemPrompt): string {
     const parts: string[] = [];
 
     parts.push(`You are an expert software engineer working as an coding assistant inside a terminal application.
@@ -14,9 +13,7 @@ export function buildSystemPrompt({ cwd, mode }: SystemPrompt): string {
     -- **PLAN** - Read-only analysis and planning. No file modifications.
     -- **BUILD** - Full implementation with read and write tools`)
 
-    if (cwd) {
-        parts.push(`\n The user's project directory is ${cwd}.`)
-    }
+
 
     if (mode === "PLAN") {
         parts.push(`
@@ -35,7 +32,7 @@ export function buildSystemPrompt({ cwd, mode }: SystemPrompt): string {
     - After making changes, verify the work when possible`);
     }
 
-    if(cwd && mode === "PLAN") {
+    if (mode === "PLAN") {
         parts.push(`
     ## Tool Usage
     You have these tools available:
@@ -50,7 +47,7 @@ export function buildSystemPrompt({ cwd, mode }: SystemPrompt): string {
     3. **Batch your tool calls.** Call multiple tools in parallel when possible (e.g. read 5 files at once, not one at a time).`);
     }
 
-    if (cwd && mode === "BUILD") {
+    if (mode === "BUILD") {
         parts.push(`
     ## Tool Usage
     You have these tools available:
