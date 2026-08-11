@@ -6,7 +6,7 @@ import auth from './routes/auth'
 import billing from './routes/billing'
 import { sentry } from "@sentry/hono/bun";
 import * as Sentry from "@sentry/hono/bun";
-import { requireAuth } from "./middleware/requireAuth";
+import { requireAuth } from "./middleware/require-auth";
 const app = new Hono();
 
 app.use(

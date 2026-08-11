@@ -1,58 +1,49 @@
 import { useEffect, useMemo, useRef } from "react";
 import { z } from "zod";
+import { Mode, modeSchema } from "@coolcode/shared";
 import { useNavigate, useLocation } from "react-router";
-import { UserMessage } from "../components/messages";
 import { SessionShell } from "../components/session-shell";
+import { UserMessage } from "../components/messages";
+import { useToast } from "../providers/toast";
 import { apiClient } from "../lib/api-client";
 import { getErrorMessage } from "../lib/http-errors";
-import { Mode } from "@coolcode/database/enums";
-import { useToast } from "../providers/toast";
-
-//new sessionstateshema, toast, hasStartedRef, state(parsed)
 
 const newSessionStateSchema = z.object({
 	message: z.string(),
-	mode: z.enum(Mode),
+	mode: modeSchema,
 	model: z.string(),
 });
 
 export function NewSession() {
 	const navigate = useNavigate();
 	const location = useLocation();
-	const hasStartedRef = useRef(false);
 	const toast = useToast();
+	const hasStartedRef = useRef(false);
 
 	const state = useMemo(() => {
 		const parsed = newSessionStateSchema.safeParse(location.state);
 		return parsed.success ? parsed.data : null;
 	}, [location.state]);
 
-	// Guard: if navigated here directly without state go home
+	// Guard: if navigated here directly without state, go home
 	useEffect(() => {
-		if (!state?.message) {
+		if (!state) {
 			navigate("/", { replace: true });
 		}
 	}, [state, navigate]);
 
-	// Create the session on mount - this screen exists to do this
+	// Create the session on mount — this screen exists to do this
 	useEffect(() => {
 		if (!state || hasStartedRef.current) return;
 
 		hasStartedRef.current = true;
-		let ignore = false;
 
+		let ignore = false;
 		const createSession = async () => {
 			try {
 				const res = await apiClient.sessions.$post({
 					json: {
 						title: state.message.slice(0, 100),
-						cwd: process.cwd(),
-						initialMessage: {
-							role: "USER",
-							content: state.message,
-							mode: state.mode,
-							model: state.model,
-						},
 					},
 				});
 
@@ -61,10 +52,9 @@ export function NewSession() {
 					throw new Error(await getErrorMessage(res));
 				}
 				const session = await res.json();
-
 				navigate(`/sessions/${session.id}`, {
 					replace: true,
-					state: { session },
+					state: { session, initialPrompt: state },
 				});
 			} catch (error) {
 				if (ignore) return;
@@ -78,12 +68,12 @@ export function NewSession() {
 		};
 
 		createSession();
-
 		return () => {
 			ignore = true;
 		};
 	}, [state, navigate, toast]);
-	if (!state?.message) return null;
+
+	if (!state) return null;
 
 	return (
 		<SessionShell onSubmit={() => {}} inputDisabled loading>
