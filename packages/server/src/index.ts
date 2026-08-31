@@ -29,6 +29,13 @@ app.get("/debug-sentry", () => {
 	throw new Error("My first Sentry error!");
 });
 
+app.get("/health", (c) => {
+	return c.json({
+		message: "Server is up and running",
+		healthy: true
+	})
+})
+
 app.onError((error, c) => {
 	if (error instanceof HTTPException) {
 		Sentry.logger.warn("Handled HTTP Error", {
