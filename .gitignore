@@ -1,6 +1,9 @@
 # dependencies (bun install)
 node_modules
 
+#graphify
+graphify-out/
+
 # output
 out
 dist
