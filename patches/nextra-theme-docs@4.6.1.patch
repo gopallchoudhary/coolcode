@@ -1,0 +1,10 @@
+diff --git a/dist/schemas.js b/dist/schemas.js
+--- a/dist/schemas.js
++++ b/dist/schemas.js
+@@ -65,3 +65,3 @@
+   banner: reactNode.optional().meta({
+     description: "Rendered [`<Banner>` component](/docs/built-ins/banner). E.g. `<Banner {...bannerProps} />`"
+   }),
+-  children: reactNode,
++  children: reactNode.optional(),
+   copyPageButton: z.boolean().default(true).meta({
