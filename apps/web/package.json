@@ -1,0 +1,24 @@
+{
+	"name": "@coolcode/web",
+	"version": "1.0.0",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"dev": "next",
+		"build": "next build",
+		"start": "next start"
+	},
+	"dependencies": {
+		"next": "^15.1.0",
+		"nextra": "^4.0.0",
+		"nextra-theme-docs": "^4.0.0",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0"
+	},
+	"devDependencies": {
+		"@types/node": "^26.2.0",
+		"@types/react": "^19.2.17",
+		"@types/react-dom": "^19.2.3",
+		"typescript": "^5"
+	}
+}
