@@ -1,0 +1,61 @@
+---
+title: Getting started
+---
+
+# Getting started
+
+## Prerequisites
+
+- [Bun](https://bun.sh) v1.x
+- A local PostgreSQL instance
+- An `OPENROUTER_API_KEY` for chat models
+- Clerk keys for auth (required to sign in and chat)
+
+## Install
+
+Clone the repository and install dependencies from the repo root:
+
+```bash
+git clone https://github.com/gopallchoudhary/coolcode
+cd coolcode
+bun install
+```
+
+`bun install` also runs `prisma generate` as a `postinstall` step of
+`@coolcode/database`. Anything importing `@coolcode/database` will not compile
+without it.
+
+## Set up the database
+
+Create a single `.env` file at the repository root (Bun auto-loads it; the
+Prisma CLI loads it explicitly through `prisma.config.ts`) and point
+`DATABASE_URL` at your Postgres instance.
+
+No migrations are tracked. Push the schema directly:
+
+```bash
+cd packages/database
+bunx prisma db push
+```
+
+## Run
+
+Start the API server (it listens on port 3000):
+
+```bash
+bun run dev:server
+```
+
+In a second terminal, start the TUI:
+
+```bash
+bun run dev:cli
+```
+
+The CLI talks to `http://localhost:3000` by default; override it with
+`API_URL`.
+
+## Next steps
+
+- [Configuration](/docs/configuration) — every environment variable the stack needs.
+- [CLI & tools](/docs/cli-and-tools) — how the agent plans, builds, and executes tools.

@@ -1,0 +1,32 @@
+---
+title: Introduction
+---
+
+# Introduction
+
+**coolcode** is an open source AI coding agent that runs in your terminal. It
+pairs a native TUI — built with OpenTUI and React — with a Hono API server
+backed by Postgres. The model streams tool calls over the wire, and the CLI
+executes them locally, inside your project.
+
+## Key capabilities
+
+- **Terminal-native interface** — a real TUI rendered with `@opentui/react`, not a web view.
+- **PLAN and BUILD modes** — PLAN is read-only, enforced on both the server and the CLI; BUILD can edit files and run commands.
+- **Local tool execution** — tool calls run inside your working directory, sandboxed to your project.
+- **Streaming chat** — tokens, tool calls, and tool results stream in real time.
+- **Sessions** — conversations and history persist in Postgres.
+- **Credits and billing** — usage is metered per message through Polar.
+
+## Repository layout
+
+coolcode is a Bun workspace monorepo:
+
+| Package             | Role                                             |
+| ------------------- | ------------------------------------------------ |
+| `packages/cli`      | Terminal UI (`@opentui/react`) and local tools   |
+| `packages/server`   | Hono API: auth, sessions, chat, billing          |
+| `packages/database` | Prisma 7 client over Postgres                    |
+| `packages/shared`   | Model registry, mode schema, AI tool contracts   |
+
+Next: [Getting started](/docs/getting-started) to run it locally.

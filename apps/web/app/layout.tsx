@@ -1,20 +1,23 @@
-import { Footer, Layout, Navbar } from 'nextra-theme-docs'
 import { Head } from 'nextra/components'
-import { getPageMap } from 'nextra/page-map'
-import 'nextra-theme-docs/style.css'
+import { JetBrains_Mono } from 'next/font/google'
+import './globals.css'
 
 export const metadata = {
   title: {
     default: 'coolcode',
     template: '%s — coolcode'
   },
-  description: 'coolcode documentation'
+  description: 'The open source terminal AI coding agent.'
 }
 
-const navbar = <Navbar logo={<b>coolcode</b>} />
-const footer = <Footer>MIT {new Date().getFullYear()} © coolcode</Footer>
+const jetbrainsMono = JetBrains_Mono({
+  weight: ['400', '500', '700'],
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+  display: 'swap'
+})
 
-export default async function RootLayout({
+export default function RootLayout({
   children
 }: {
   children: React.ReactNode
@@ -23,20 +26,17 @@ export default async function RootLayout({
     <html
       lang="en"
       dir="ltr"
-      // Suggested by `next-themes` package https://github.com/pacocoursey/next-themes#with-app
       suppressHydrationWarning
+      className={jetbrainsMono.variable}
     >
-      <Head />
-      <body>
-        <Layout
-          navbar={navbar}
-          pageMap={await getPageMap()}
-          docsRepositoryBase="https://github.com/gopallchoudhary/coolcode/tree/main/apps/web"
-          footer={footer}
-        >
-          {children}
-        </Layout>
-      </body>
+      <Head
+        // Primary = {colors.ink} #201d1d -> hsl(0, 5%, 12%)
+        color={{ hue: 0, saturation: 5, lightness: 12 }}
+        // Background = {colors.canvas} #fdfcfc
+        backgroundColor={{ light: 'rgb(253,252,252)', dark: 'rgb(253,252,252)' }}
+        faviconGlyph="❯"
+      />
+      <body>{children}</body>
     </html>
   )
 }

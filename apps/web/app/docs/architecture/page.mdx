@@ -1,0 +1,54 @@
+---
+title: Architecture
+---
+
+# Architecture
+
+```
+┌──────────────┐   typed RPC + SSE   ┌──────────────┐   Prisma / pg   ┌──────────┐
+│ packages/cli │ ──────────────────► │   packages/  │ ──────────────► │ Postgres │
+│  OpenTUI TUI │ ◄────────────────── │    server    │                 └──────────┘
+│  local tools │   streamText →      │    (Hono)    │ ──────────────► OpenRouter,
+└──────────────┘   tool calls       └──────────────┘                 Clerk, Polar
+```
+
+## Packages
+
+- **`packages/cli`** (`@coolcode/cli`) — terminal UI via `@opentui/react` +
+  `react-router` (memory router). Talks to the server with a typed Hono RPC
+  client (`hc<AppType>` from `@coolcode/server`, used only for types) plus
+  `DefaultChatTransport` for chat streaming. Auth token injection lives in
+  `src/lib/api-client.ts`.
+- **`packages/server`** (`@coolcode/server`) — Hono app exporting `AppType`.
+  Routes: auth (Clerk), billing (Polar), sessions, chat. All
+  chat/session/billing routes sit behind `requireAuth`; chat additionally
+  runs `requireCreditsBalance`, and usage is billed to Polar per message in
+  the chat `onFinish` handler.
+- **`packages/database`** (`@coolcode/database`) — Prisma 7 +
+  `@prisma/adapter-pg`. Import `db` from `@coolcode/database/client`, not the
+  root export. The generated client lives at
+  `packages/database/generated/prisma` and is gitignored.
+- **`packages/shared`** (`@coolcode/shared`) — model registry, `modeSchema`
+  (BUILD/PLAN), and AI tool contracts (`getToolContracts(mode)`) shared by
+  the server and the CLI.
+
+## Deliberate version split
+
+The CLI pins `ai@6` + `@ai-sdk/react@3`, while the server and shared packages
+use `ai@7`. Types cross the boundary through `@coolcode/shared` contracts.
+Do not "align" these versions casually.
+
+## Server notes
+
+- The server listens on port 3000 (hardcoded).
+- `idleTimeout: 255` is deliberately high so long LLM and tool runs are not
+  cut off — do not lower it.
+
+## Development commands
+
+```bash
+bun run dev:server   # Hono API on :3000
+bun run dev:cli      # TUI with watch
+bun run build:cli    # build to packages/cli/dist
+bun run link:cli     # build:cli, then bun link
+```

@@ -1,0 +1,40 @@
+---
+title: CLI & tools
+---
+
+# CLI & tools
+
+The agent chat is a collaboration between the server and the CLI: the server
+streams tool calls from the model, the CLI **executes them locally**, and the
+results are returned to the model automatically
+(`sendAutomaticallyWhen`). Nothing runs on the server's filesystem.
+
+## Modes
+
+`packages/shared` defines the two modes and their tool contracts
+(`getToolContracts(mode)`):
+
+| Mode    | Tools                                                             | Use                         |
+| ------- | ----------------------------------------------------------------- | --------------------------- |
+| `PLAN`  | `readFile` · `listDirectory` · `glob` · `grep`                     | Read-only exploration       |
+| `BUILD` | everything in PLAN, plus `writeFile` · `editFile` · `bash`         | Editing files, running commands |
+
+PLAN mode is enforced **twice**: the server only ever sends the read-only
+contracts, and the CLI refuses to run write tools even if it receives them.
+
+## Sandbox
+
+All paths are relative to the CLI's working directory. The local tool
+implementations in `packages/cli/src/lib/local-tools.ts` sandbox every call
+to the project cwd — the agent can only see and touch the repository it was
+launched from.
+
+## Streaming
+
+The server uses `streamText` from the AI SDK, so tokens, tool calls, and tool
+results all arrive incrementally in the TUI. Tool results are forwarded back
+without user interaction, which keeps multi-step tasks moving.
+
+## Next steps
+
+- [Architecture](/docs/architecture) — how the packages fit together.

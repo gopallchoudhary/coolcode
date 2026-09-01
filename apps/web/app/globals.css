@@ -1,0 +1,12 @@
+/*
+ * Single-font decision (DESIGN.md): JetBrains Mono carries every text role,
+ * substituting Berkeley Mono. Overrides nextra-theme-docs font tokens with
+ * higher specificity (html:root beats the theme's :root,:host block).
+ */
+html:root {
+  --mono-stack: var(--font-jetbrains-mono), 'IBM Plex Mono', ui-monospace,
+    SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+    monospace;
+  --x-font-sans: var(--mono-stack);
+  --x-font-mono: var(--mono-stack);
+}

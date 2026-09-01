@@ -1,0 +1,38 @@
+---
+title: Configuration
+---
+
+# Configuration
+
+One `.env` file at the repository root serves the whole stack. Bun auto-loads
+it for the server and the CLI, and `prisma.config.ts` loads it explicitly for
+the Prisma CLI.
+
+## Server
+
+| Variable                   | Required | Notes                                        |
+| -------------------------- | -------- | -------------------------------------------- |
+| `DATABASE_URL`             | yes      | Postgres connection string                   |
+| `CLERK_SECRET_KEY`         | yes      | Clerk OAuth. Missing keys throw at import time in `packages/server/src/lib/auth.ts` |
+| `CLERK_PUBLISHABLE_KEY`    | yes      | Clerk OAuth                                  |
+| `OPENROUTER_API_KEY`       | yes      | Routes chat models through OpenRouter        |
+| `POLAR_ACCESS_TOKEN`       | yes      | Credits and billing via Polar                |
+| `POLAR_PRODUCT_ID`         | yes      | Polar product for credit packs               |
+| `POLAR_CREDITS_METER_ID`   | yes      | Meter used to record per-message usage       |
+| `POLAR_SERVER`             | no       | Defaults to the Polar sandbox                |
+
+## CLI
+
+| Variable                 | Required | Notes                                   |
+| ------------------------ | -------- | --------------------------------------- |
+| `API_URL`                | no       | Defaults to `http://localhost:3000`     |
+| `CLERK_FRONTEND_API`     | yes      | Clerk frontend API URL                  |
+| `CLERK_OAUTH_CLIENT_ID`  | yes      | Clerk OAuth client                      |
+
+## Gotchas
+
+- `packages/server/src/lib/auth.ts` throws at import time if Clerk keys are
+  missing — the server will not start without them.
+- The 401 handler clears the CLI's stored auth token (`clearAuth`) in both the
+  RPC client and the chat transport, so an expired session silently returns
+  you to the sign-in flow.
