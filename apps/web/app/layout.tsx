@@ -31,10 +31,15 @@ export default function RootLayout({
       className={jetbrainsMono.variable}
     >
       <Head
-        // Primary = {colors.ink} #201d1d -> hsl(0, 5%, 12%)
-        color={{ hue: 0, saturation: 5, lightness: 12 }}
-        // Background = {colors.canvas} #fdfcfc
-        backgroundColor={{ light: 'rgb(253,252,252)', dark: 'rgb(253,252,252)' }}
+        // Primary = {colors.ink} #201d1d -> hsl(0, 5%, 12%); in dark mode the
+        // canvas flips to the brand's surface-dark and the primary lightens.
+        color={{
+          hue: { light: 0, dark: 0 },
+          saturation: { light: 5, dark: 5 },
+          lightness: { light: 12, dark: 90 }
+        }}
+        // Background = {colors.canvas} #fdfcfc / {colors.surface-dark} #201d1d
+        backgroundColor={{ light: 'rgb(253,252,252)', dark: 'rgb(32,29,29)' }}
         faviconGlyph="❯"
       />
       <body>{children}</body>

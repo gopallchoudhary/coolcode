@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import ThemeToggle from './theme-toggle'
 import styles from './page.module.css'
 
 const GITHUB_URL = 'https://github.com/gopallchoudhary/coolcode'
@@ -83,6 +84,7 @@ export default function HomePage() {
             </pre>
           </Link>
           <nav className={styles.navLinks} aria-label="Primary">
+            <ThemeToggle />
             <a
               className={styles.navLink}
               href={GITHUB_URL}

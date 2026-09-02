@@ -1,28 +1,60 @@
 /*
  * Landing page — every value is taken verbatim from DESIGN.md.
  * Flat, single-class selectors; no shadows, no gradients, no SVG icons.
+ *
+ * Light theme = DESIGN.md as written. Dark theme (html.dark) inverts the
+ * brand: the canvas becomes {colors.surface-dark} #201d1d, ink becomes cream
+ * — i.e. the whole page renders like the hero TUI card. The TUI mockup keeps
+ * its dark surface in both themes and gains a hairline border in dark so it
+ * still reads against the canvas.
  */
 
 .page {
+  --bg: #fdfcfc; /* {colors.canvas} */
+  --fg: #201d1d; /* {colors.ink} */
+  --body-text: #424245; /* {colors.body} */
+  --mute: #646262; /* {colors.mute} */
+  --hairline: rgba(15, 0, 0, 0.12); /* {colors.hairline} */
+  --strong: #646262; /* {colors.hairline-strong} */
+  --card: #f1eeee; /* {colors.surface-card} */
+  --badge-bg: #201d1d; /* {colors.surface-dark} */
+  --badge-fg: #fdfcfc; /* {colors.on-dark} */
+  --primary-active: #0f0000; /* {colors.ink-deep} */
+  --tui-border: transparent;
+
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: #fdfcfc; /* {colors.canvas} */
-  color: #201d1d; /* {colors.ink} */
+  background: var(--bg);
+  color: var(--fg);
   font-family: var(--font-jetbrains-mono), 'IBM Plex Mono', ui-monospace,
     SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
     monospace;
 }
 
+:global(html.dark) .page {
+  --bg: #201d1d; /* {colors.surface-dark} */
+  --fg: #fdfcfc; /* {colors.on-dark} */
+  --body-text: #9a9898; /* {colors.ash} — the TUI mockup's secondary */
+  --mute: #9a9898;
+  --hairline: rgba(253, 252, 252, 0.12);
+  --strong: #9a9898;
+  --card: #302c2c; /* {colors.surface-dark-elevated} */
+  --badge-bg: #302c2c;
+  --badge-fg: #fdfcfc;
+  --primary-active: #e2e0e0;
+  --tui-border: rgba(253, 252, 252, 0.12);
+}
+
 .page a:focus-visible {
-  outline: 2px solid #201d1d;
+  outline: 2px solid var(--fg);
   outline-offset: 2px;
 }
 
 /* ---- {component.primary-nav} ---- */
 
 .nav {
-  border-bottom: 1px solid rgba(15, 0, 0, 0.12); /* {colors.hairline} */
+  border-bottom: 1px solid var(--hairline);
 }
 
 .navInner {
@@ -59,11 +91,11 @@
 }
 
 .navWordmarkCool {
-  color: #646262; /* {colors.mute} */
+  color: var(--mute);
 }
 
 .navWordmarkCode {
-  color: #201d1d; /* {colors.ink} */
+  color: var(--fg);
 }
 
 .navLinks {
@@ -77,7 +109,7 @@
   font-size: 16px;
   font-weight: 500; /* {typography.body-strong} */
   line-height: 1.5;
-  color: #201d1d;
+  color: var(--fg);
   text-decoration: none;
 }
 
@@ -86,7 +118,7 @@
 }
 
 .navLink:active {
-  color: #0f0000; /* {colors.ink-deep} */
+  opacity: 0.55;
 }
 
 /* {component.button-primary} in the nav */
@@ -98,8 +130,8 @@
   height: 36px;
   padding: 4px 20px;
   border-radius: 4px; /* {rounded.sm} */
-  background: #201d1d;
-  color: #fdfcfc; /* {colors.on-primary} */
+  background: var(--fg);
+  color: var(--bg); /* {colors.on-primary} */
   font-size: 16px;
   font-weight: 500; /* {typography.button-md} */
   line-height: 2;
@@ -107,7 +139,7 @@
 }
 
 .navCta:active {
-  background: #0f0000; /* {component.button-primary-active} */
+  background: var(--primary-active); /* {component.button-primary-active} */
 }
 
 /* ---- shared frames ---- */
@@ -147,8 +179,8 @@
   margin: 0;
   padding: 2px 8px;
   border-radius: 4px;
-  background: #201d1d;
-  color: #fdfcfc;
+  background: var(--badge-bg);
+  color: var(--badge-fg);
   font-size: 14px;
   font-weight: 400; /* {typography.caption-md} */
   line-height: 2;
@@ -169,7 +201,7 @@
   font-size: 16px;
   font-weight: 400; /* {typography.body-md} */
   line-height: 1.5;
-  color: #424245; /* {colors.body} */
+  color: var(--body-text);
 }
 
 .ctaRow {
@@ -188,8 +220,8 @@
   height: 36px;
   padding: 4px 20px;
   border-radius: 4px;
-  background: #201d1d;
-  color: #fdfcfc;
+  background: var(--fg);
+  color: var(--bg);
   font-size: 16px;
   font-weight: 500;
   line-height: 2;
@@ -197,7 +229,7 @@
 }
 
 .btnPrimary:active {
-  background: #0f0000;
+  background: var(--primary-active);
 }
 
 /* {component.button-secondary} */
@@ -209,9 +241,9 @@
   height: 36px;
   padding: 4px 20px;
   border-radius: 4px;
-  background: #fdfcfc;
-  color: #201d1d;
-  border: 1px solid #646262; /* {colors.hairline-strong} */
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--strong); /* {colors.hairline-strong} */
   font-size: 16px;
   font-weight: 500;
   line-height: 2;
@@ -219,7 +251,7 @@
 }
 
 .btnSecondary:active {
-  background: #f1eeee; /* {colors.surface-card} */
+  background: var(--card); /* {colors.surface-card} */
 }
 
 /* ---- {component.hero-tui-mockup} — the page's single dark surface ---- */
@@ -229,7 +261,8 @@
 }
 
 .tui {
-  background: #201d1d; /* {colors.surface-dark} */
+  background: #201d1d; /* {colors.surface-dark} — kept in both themes */
+  border: 1px solid var(--tui-border); /* separates it from a dark canvas */
   border-radius: 0; /* {rounded.none} */
   padding: 64px 32px;
   text-align: center;
@@ -323,7 +356,7 @@
 .sectionHead {
   margin: 0;
   padding-bottom: 12px; /* {spacing.md} */
-  border-bottom: 1px solid rgba(15, 0, 0, 0.12);
+  border-bottom: 1px solid var(--hairline);
   font-size: 16px; /* {typography.heading-md} */
   font-weight: 700;
   line-height: 1.5;
@@ -347,17 +380,17 @@
 }
 
 .marker {
-  color: #201d1d;
+  color: var(--fg);
   font-weight: 500;
 }
 
 .rowLabel {
-  color: #201d1d;
+  color: var(--fg);
   font-weight: 500; /* {typography.body-strong} */
 }
 
 .rowText {
-  color: #424245;
+  color: var(--body-text);
 }
 
 .stepBody {
@@ -369,7 +402,7 @@
 
 .stepText {
   margin: 4px 0 0;
-  color: #424245;
+  color: var(--body-text);
 }
 
 /* {component.install-snippet} */
@@ -379,22 +412,22 @@
   margin-top: 12px;
   padding: 12px 16px;
   border-radius: 4px;
-  background: #f1eeee; /* {colors.surface-card} */
+  background: var(--card); /* {colors.surface-card} */
   font-family: inherit;
   font-size: 16px;
   line-height: 1.5;
-  color: #201d1d;
+  color: var(--fg);
 }
 
 /* ---- {component.footer-section} ---- */
 
 .footer {
   margin-top: 96px;
-  border-top: 1px solid rgba(15, 0, 0, 0.12);
+  border-top: 1px solid var(--hairline);
   padding: 32px 0;
   font-size: 14px; /* {typography.caption-md} */
   line-height: 2;
-  color: #646262; /* {colors.mute} */
+  color: var(--mute);
 }
 
 .footerInner {
@@ -413,7 +446,7 @@
 }
 
 .footerLink {
-  color: #646262;
+  color: var(--mute);
   text-decoration: none;
 }
 
@@ -422,7 +455,7 @@
 }
 
 .footerLink:active {
-  color: #0f0000;
+  color: var(--fg);
 }
 
 /* ---- responsive (DESIGN.md breakpoints) ---- */
@@ -479,7 +512,7 @@
     gap: 10px;
   }
 
-  /* Keep wordmark + GitHub + Docs on one line down to 320px */
+  /* Keep wordmark + toggle + GitHub + Docs on one line down to 320px */
   .navInner,
   .navLinks {
     gap: 12px;
