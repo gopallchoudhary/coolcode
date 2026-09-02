@@ -118,9 +118,16 @@
   padding-inline: 24px;
 }
 
+/*
+ * 960px text column (DESIGN.md). max-width includes the 48px of padding
+ * (border-box via the theme's preflight), so the text column stays exactly
+ * 960px while the padding keeps content off the viewport edges on small
+ * screens — .frame previously had this, .content did not.
+ */
 .content {
-  max-width: 960px;
+  max-width: calc(960px + 48px);
   margin-inline: auto;
+  padding-inline: 24px;
 }
 
 .main {
@@ -468,18 +475,33 @@
     font-size: 14px;
   }
 
-  .listRow {
-    grid-template-columns: 1fr;
-    row-gap: 4px;
+  .promptRow {
+    gap: 10px;
   }
 
-  .rowText,
-  .stepBody {
-    grid-column: auto;
+  /* Keep wordmark + GitHub + Docs on one line down to 320px */
+  .navInner,
+  .navLinks {
+    gap: 12px;
+  }
+
+  .navWordmark {
+    font-size: 9px;
+  }
+
+  .navLink {
+    font-size: 14px;
   }
 
   .footerInner {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Let the CTA pair wrap into tidy full-width buttons */
+  .ctaRow a {
+    flex: 1 1 auto;
   }
 }
 
