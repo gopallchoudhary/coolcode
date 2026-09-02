@@ -3,17 +3,11 @@ import styles from './page.module.css'
 
 const GITHUB_URL = 'https://github.com/gopallchoudhary/coolcode'
 
-// Block-pixel ASCII wordmark, 5 rows — the brand identity is its own ASCII art
-// (DESIGN.md: never render the wordmark as a vector logo).
-const C = [' ████', '█    ', '█    ', '█    ', ' ████']
-const O = [' ███ ', '█   █', '█   █', '█   █', ' ███ ']
-const L = ['█    ', '█    ', '█    ', '█    ', '█████']
-const D = ['████ ', '█   █', '█   █', '█   █', '████ ']
-const E = ['█████', '█    ', '████ ', '█    ', '█████']
-
-const WORDMARK = Array.from({ length: 5 }, (_, row) =>
-  [C, O, O, L, C, O, D, E].map(letter => letter[row]).join(' ')
-).join('\n')
+// 2-row cfonts 'tiny' block wordmark (matching OpenTUI / OpenCode terminal header)
+const TINY_WORDMARK = {
+  cool: ['█▀▀ █▀█ █▀█ █  ', '█▄▄ █▄█ █▄█ █▄▄'],
+  code: ['█▀▀ █▀█ █▀▄ █▀▀', '█▄▄ █▄█ █▄▀ ██▄']
+}
 
 const FEATURES = [
   {
@@ -78,8 +72,14 @@ export default function HomePage() {
             className={styles.wordmarkLink}
             aria-label="coolcode — home"
           >
-            <pre className={styles.wordmark} aria-hidden="true">
-              {WORDMARK}
+            <pre className={styles.navWordmark} aria-hidden="true">
+              <span className={styles.navWordmarkCool}>{TINY_WORDMARK.cool[0]}</span>
+              {' '}
+              <span className={styles.navWordmarkCode}>{TINY_WORDMARK.code[0]}</span>
+              {'\n'}
+              <span className={styles.navWordmarkCool}>{TINY_WORDMARK.cool[1]}</span>
+              {' '}
+              <span className={styles.navWordmarkCode}>{TINY_WORDMARK.code[1]}</span>
             </pre>
           </Link>
           <nav className={styles.navLinks} aria-label="Primary">
@@ -136,7 +136,13 @@ export default function HomePage() {
           <div className={styles.frame}>
             <div className={styles.tui}>
               <pre className={styles.tuiWordmark} aria-hidden="true">
-                {WORDMARK}
+                <span className={styles.tuiWordmarkCool}>{TINY_WORDMARK.cool[0]}</span>
+                {' '}
+                <span className={styles.tuiWordmarkCode}>{TINY_WORDMARK.code[0]}</span>
+                {'\n'}
+                <span className={styles.tuiWordmarkCool}>{TINY_WORDMARK.cool[1]}</span>
+                {' '}
+                <span className={styles.tuiWordmarkCode}>{TINY_WORDMARK.code[1]}</span>
               </pre>
               <div className={styles.promptRow}>
                 <span className={styles.promptPipe}>|</span>
