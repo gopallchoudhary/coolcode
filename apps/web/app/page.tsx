@@ -216,7 +216,7 @@ export default function HomePage() {
 
       <footer className={styles.footer}>
         <div className={styles.footerInner}>
-          <span>© {new Date().getFullYear()} coolcode · MIT</span>
+          <span>© {new Date().getFullYear()} coolcode</span>
           <nav className={styles.footerLinks} aria-label="Footer">
             <a
               className={styles.footerLink}

@@ -17,7 +17,7 @@ export default async function DocsLayout({
           projectLink="https://github.com/gopallchoudhary/coolcode"
         />
       }
-      footer={<Footer>MIT {new Date().getFullYear()} © coolcode</Footer>}
+      footer={<Footer>© {new Date().getFullYear()} coolcode</Footer>}
       docsRepositoryBase="https://github.com/gopallchoudhary/coolcode/tree/main/apps/web"
       darkMode={false}
       nextThemes={{ forcedTheme: 'light' }}
