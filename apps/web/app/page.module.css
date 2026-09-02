@@ -41,9 +41,16 @@
   text-decoration: none;
 }
 
+/*
+ * Wordmark font: JetBrains Mono's latin subset ships no Block Elements
+ * (U+2580-2588), so █▀▄ would fall back per-glyph to a differently-metriced
+ * font and break the character grid. These stacks resolve to a single font
+ * that contains the glyphs on every platform — same glyphs, correct grid.
+ */
 .navWordmark {
   margin: 0;
-  font-family: inherit;
+  font-family: 'Cascadia Mono', Consolas, Menlo, 'DejaVu Sans Mono',
+    'Liberation Mono', 'Courier New', monospace;
   font-size: 11px;
   line-height: 1.05;
   letter-spacing: 0;
@@ -223,15 +230,14 @@
 }
 
 .tuiWordmark {
-  margin: 0 auto;
-  font-family: inherit;
-  font-size: clamp(14px, 3.2vw, 24px);
-  line-height: 1.05;
-  letter-spacing: 0;
+  margin: 0;
+  font-family: 'Cascadia Mono', Consolas, Menlo, 'DejaVu Sans Mono',
+    'Liberation Mono', 'Courier New', monospace;
+  font-size: clamp(9px, 3.2vw, 26px);
+  line-height: 1;
   white-space: pre;
+  color: #fdfcfc; /* {colors.on-dark} */
   user-select: none;
-  display: inline-block;
-  text-align: left;
 }
 
 .tuiWordmarkCool {
@@ -264,9 +270,13 @@
   color: #9a9898; /* {colors.ash} */
 }
 
+/* Terminal cursor: a CSS block, independent of font glyph coverage */
 .cursor {
   display: inline-block;
-  width: 1ch;
+  width: 0.6em;
+  height: 1.1em;
+  background: #fdfcfc;
+  vertical-align: text-bottom;
   animation: blink 1.06s step-end infinite;
 }
 

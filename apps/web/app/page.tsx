@@ -149,9 +149,7 @@ export default function HomePage() {
                 <span>Build</span>
                 <span className={styles.promptModel}>[gpt-5.4]</span>
                 <span>coolcode</span>
-                <span className={styles.cursor} aria-hidden="true">
-                  █
-                </span>
+                <span className={styles.cursor} aria-hidden="true" />
               </div>
               <div className={styles.hintsRow}>
                 <span>tab switch agent</span>

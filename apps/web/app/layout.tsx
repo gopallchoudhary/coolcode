@@ -1,5 +1,6 @@
 import { Head } from 'nextra/components'
 import { JetBrains_Mono } from 'next/font/google'
+import 'nextra-theme-docs/style.css'
 import './globals.css'
 
 export const metadata = {
