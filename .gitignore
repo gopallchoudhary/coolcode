@@ -8,6 +8,7 @@ graphify-out/
 out
 dist
 .next
+.next-prod
 *.tgz
 
 # code coverage
