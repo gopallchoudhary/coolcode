@@ -5,7 +5,7 @@
 
 # coolcode
 
-> coolcode — the open source terminal AI coding agent.
+> coolcode — the powerful terminal AI coding agent.
 
 coolcode is an AI coding agent that lives in your terminal. A native TUI,
 built with OpenTUI and React, talks to a Hono API server backed by Postgres.
