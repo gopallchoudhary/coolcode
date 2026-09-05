@@ -19,7 +19,7 @@ export default async function DocsLayout({
       // The ThemeToggle renders a sun/moon button immediately left of the
       // GitHub icon; nextra renders Navbar children after its built-in slots.
       navbar={
-        <Navbar logo={<b>coolcode</b>}>
+        <Navbar logo={<img src="/coolcode.svg" alt="coolcode" width={28} height={28} />}>
           <ThemeToggle />
           <Anchor href={GITHUB_URL}>
             <GitHubIcon height="24" aria-label="Project repository" />

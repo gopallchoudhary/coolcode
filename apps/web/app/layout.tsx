@@ -9,6 +9,9 @@ export const metadata = {
 		template: "%s — coolcode",
 	},
 	description: "The terminal AI coding agent.",
+	icons: {
+		icon: "/coolcode.svg",
+	},
 };
 
 const jetbrainsMono = JetBrains_Mono({
@@ -40,7 +43,6 @@ export default function RootLayout({
 				}}
 				// Background = {colors.canvas} #fdfcfc / {colors.surface-dark} #201d1d
 				backgroundColor={{ light: "rgb(253,252,252)", dark: "rgb(32,29,29)" }}
-				faviconGlyph="❯"
 			/>
 			<body>{children}</body>
 		</html>
